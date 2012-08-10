@@ -2,10 +2,11 @@
 Christopher Pierce
 Warlords game
 Written 08/01/2012
-Last Modified 08/01/2012
+Last Modified 08/10/2012
 Game pits zues vs poseidon vs hades in a 
 pokemon-like text based fighter game
 */
+//TODO: handle incorrect input type and display approperiate message
 
 #include <iostream>
 #include <iomanip>
@@ -164,44 +165,60 @@ int main()
  
   
  checkWarlordSelection:
-
-  cin >> warlordSelection;
   do
     {
-      if(warlordSelection == 1)
-        { 
-         cout << "You chose Zues.\n";
-         chosen = zues;
-         chosen.isTurn = 1;
-         challenger = poseidon;
-         isValid=1;
-        }
-      else if(warlordSelection == 2) 
+      cout << "Enter Selection. " << endl;
+      try
         {
-          cout << "You chose Poseidon. \n";
-          chosen = poseidon;
-          chosen.isTurn = 1;
-          challenger = hades;
-          isValid=1;
-        } 
-      else if(warlordSelection == 3) 
+          cin >> warlordSelection;
+          if(warlordSelection == 1)
+            {
+              cout << "You chose Zues.\n";
+              chosen = zues;
+              chosen.isTurn = 1;
+              challenger = poseidon;
+              isValid=1;
+            }
+          else if(warlordSelection == 2)
+            {
+              cout << "You chose Poseidon. \n";
+              chosen = poseidon;
+              chosen.isTurn = 1;
+              challenger = hades;
+              isValid=1;
+            }
+          else if(warlordSelection == 3)
+            {
+              cout << "You chose Hades. \n";
+              chosen = hades;
+              chosen.isTurn = 1;
+              challenger = zues;
+              isValid=1;
+            }
+          else throw warlordSelection;
+         }
+      catch (string warlordSelection)     
         {
-          cout << "You chose Hades. \n";
-          chosen = hades;
-          chosen.isTurn = 1;
-          challenger = zues;
-          isValid=1;
-        }
-      else 
-        {
-          cout << "You didnt enter in a 1 or a 2 or a 3. you didnt follow instructions. Bad user! \n";
-          cout << "Please select your character. 1 for zues, 2 for Poseidon, and 3 for Hades.\n"
-               << "Anthing else is garbage, and you will be yelled at for inputting garbage.\n";
+          cout << "Please enter valid data! " << "You entered: " << "a character. " << endl;
           isValid = 0;
-          //goto checkWarlordSelection;
+          goto checkWarlordSelection;
         }
-     }  
-     while(!isValid);
+
+      catch (char warlordSelection)
+        {
+          cout << "Please enter valid data! " << "You entered: " << "a character. " << endl;
+          isValid = 0;
+          goto checkWarlordSelection;
+        }
+     
+      catch (double warlordSelection)
+        {
+          cout << "Please enter valid data! " << "You entered: " << "a double. " << endl;  
+          isValid = 0;
+          goto checkWarlordSelection;
+        } 
+     }//end do  
+     while(isValid = 0);
   
   cout << "Type: " << chosen.type << " Weakness: " << chosen.weakness << endl; 
   cout << "Attack: " << chosen.attackDamage << " Defence value: " << chosen.defenceValue << endl;
@@ -212,20 +229,20 @@ int main()
 
   //control loop so the warlords fight to the death! 
   do
-  {  
-    cout << "It's your turn! Enter 1 to attack, 2 to defend, or 3 to give up! " << endl;
-    cin >> selection;
-    cout << endl;
-
-    if(selection > 0 && selection < 4) {isValid=1; }
-    else isValid=0;   
-
-    chooseMenu(selection, weakMultiplier, chosen, challenger);
-    cout << "Enemy " << challenger.name << " has only: " << challenger.currentHealth << " health remaining! " << endl;
-    challengersChoice(aiSelection, weakMultiplier, aiDamageDone, chosen, challenger);
-    cout << "Your warlord: " << chosen.name << " has only: " << chosen.currentHealth << " health remaining! " << endl;
- 
-  }
+    {  
+      cout << "It's your turn! Enter 1 to attack, 2 to defend, or 3 to give up! " << endl;
+      cin >> selection;
+      cout << endl;
+  
+      if(selection > 0 && selection < 4) {isValid=1; }
+      else isValid=0;   
+  
+      chooseMenu(selection, weakMultiplier, chosen, challenger);
+      cout << "Enemy " << challenger.name << " has only: " << challenger.currentHealth << " health remaining! " << endl;
+      challengersChoice(aiSelection, weakMultiplier, aiDamageDone, chosen, challenger);
+      cout << "Your warlord: " << chosen.name << " has only: " << chosen.currentHealth << " health remaining! " << endl;
+   
+    }
   while(chosen.currentHealth > 0 && challenger.currentHealth > 0);
   
   if(challenger.currentHealth <= 0) { cout << "You win! Congradulations." << endl; }
